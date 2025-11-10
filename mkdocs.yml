@@ -1,0 +1,15 @@
+site_name: Shop
+nav:
+  - 'Каталог наших товаров': 'index.md'
+  - 'Корзина': 'cart.md'
+theme:
+  name: material
+  features:
+    - navigation.tracking
+extra_css:
+  - assets/css/custom.css
+extra_javascript:
+  - assets/js/cart.js
+  - assets/js/main-page.js
+  - assets/js/product-page.js
+  - assets/js/cart-ui-updater.js
