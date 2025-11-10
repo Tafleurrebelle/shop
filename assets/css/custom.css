@@ -1,0 +1,25 @@
+.md-sidebar--secondary {
+    display: none !important;
+}
+
+/* Стили для нашего собственного уведомления */
+.my-snackbar {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #323232;
+    color: white;
+    padding: 14px 16px;
+    border-radius: 4px;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s, bottom 0.3s;
+}
+
+.my-snackbar.show {
+    opacity: 1;
+    visibility: visible;
+    bottom: 30px;
+}
