@@ -1,0 +1,90 @@
+/*
+ * ==============================================================================
+ * ВИЗУАЛЬНЫЕ СТИЛИ (ЦВЕТА, ШРИФТЫ, ОБВОДКИ)
+ * ============================================================================== */
+
+/* Переопределяем основные цвета темы на зелёный */
+:root {
+    --md-primary-fg-color: #009688; /* Teal 500 */
+    --md-accent-fg-color: #4db6ac; /* Teal A400 */
+}
+
+/* --- Уведомление (Snackbar) --- */
+
+.my-snackbar {
+    background-color: #323232;
+    color: white;
+    padding: 14px 16px;
+    border-radius: 4px;
+}
+
+/* --- Страница корзины --- */
+
+.cart-item {
+    border-bottom: 1px solid var(--md-default-fg-color--lightest);
+}
+
+.cart-item:last-child {
+    border-bottom: none;
+}
+
+.cart-item__image img {
+    border-radius: 4px;
+}
+
+.cart-item__name {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: var(--md-primary-fg-color); /* Теперь будет зелёным */
+}
+
+.cart-item__description {
+    font-size: 0.9em;
+    color: var(--md-default-fg-color--light);
+}
+
+.cart-item__price {
+    font-size: 1.3em;
+    font-weight: bold;
+}
+
+.cart-item__quantity-controls .quantity-btn {
+    font-size: 1.2em;
+}
+
+.cart-item__quantity-controls .quantity-text {
+    font-size: 0.9em;
+}
+
+/* --- Страница товара --- */
+
+.product-page-price {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: var(--md-primary-fg-color); /* Теперь будет зелёным */
+}
+
+.swiper {
+    border-radius: 5px;
+}
+
+.swiper-slide {
+    background: #f7f7f7;
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+    color: var(--md-primary-fg-color) !important; /* Теперь будет зелёным */
+}
+
+.swiper-pagination-bullet-active {
+    background: var(--md-primary-fg-color) !important; /* Теперь будет зелёным */
+}
+
+/* --- Фильтр на главной странице --- */
+
+#product-filter-input {
+    font-size: 1rem;
+    border: 1px solid var(--md-default-fg-color--lightest);
+    border-radius: 5px;
+}

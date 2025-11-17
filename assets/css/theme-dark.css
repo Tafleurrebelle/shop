@@ -1,0 +1,93 @@
+/*
+ * ==============================================================================
+ * ТЁМНАЯ ТЕМА (ЦВЕТА, ШРИФТЫ, ОБВОДКИ)
+ * ============================================================================== */
+
+/* Переопределяем основные цвета темы на оранжевый */
+:root {
+    --md-primary-fg-color: #fb8c00; /* Оранжевый */
+    --md-accent-fg-color: #ff9800; /* Чуть другой оттенок оранжевого для акцента */
+}
+
+/* --- Уведомление (Snackbar) --- */
+
+.my-snackbar {
+    background-color: #e0e0e0; /* Светлый снэкбар на темном фоне */
+    color: #121212;
+    padding: 14px 16px;
+    border-radius: 4px;
+}
+
+/* --- Страница корзины --- */
+
+.cart-item {
+    border-bottom: 1px solid #333; /* Более светлая граница для темного фона */
+}
+
+.cart-item:last-child {
+    border-bottom: none;
+}
+
+.cart-item__image img {
+    border-radius: 4px;
+}
+
+.cart-item__name {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: var(--md-primary-fg-color); /* Теперь будет оранжевым */
+}
+
+.cart-item__description {
+    font-size: 0.9em;
+    color: #b0b0b0; /* Светло-серый текст */
+}
+
+.cart-item__price {
+    font-size: 1.3em;
+    font-weight: bold;
+    color: #e0e0e0;
+}
+
+.cart-item__quantity-controls .quantity-btn {
+    font-size: 1.2em;
+}
+
+.cart-item__quantity-controls .quantity-text {
+    font-size: 0.9em;
+}
+
+/* --- Страница товара --- */
+
+.product-page-price {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: var(--md-primary-fg-color); /* Теперь будет оранжевым */
+}
+
+.swiper {
+    border-radius: 5px;
+}
+
+.swiper-slide {
+    background: #2d2d2d; /* Темный фон для слайдов */
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+    color: var(--md-primary-fg-color) !important; /* Теперь будет оранжевым */
+}
+
+.swiper-pagination-bullet-active {
+    background: var(--md-primary-fg-color) !important; /* Теперь будет оранжевым */
+}
+
+/* --- Фильтр на главной странице --- */
+
+#product-filter-input {
+    font-size: 1rem;
+    border: 1px solid #444;
+    border-radius: 5px;
+    background-color: #2d2d2d;
+    color: #e0e0e0;
+}
