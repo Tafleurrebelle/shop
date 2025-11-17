@@ -167,3 +167,38 @@
 .swiper-pagination-bullet-active {
     background: var(--md-primary-fg-color) !important;
 }
+
+/*
+ * Стили для фильтра на главной странице
+ * ============================================================================== */
+
+.filter-container {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    align-items: center;
+}
+
+#product-filter-input {
+    flex-grow: 1;
+    padding: 0.8rem;
+    font-size: 1rem;
+    border: 1px solid var(--md-default-fg-color--lightest);
+    border-radius: 5px;
+}
+
+#product-filter-button {
+    display: none; /* Скрыта по умолчанию на десктопе */
+}
+
+/* Медиа-запрос для мобильных устройств */
+@media (max-width: 768px) {
+    #product-filter-button {
+        display: inline-block; /* Показываем кнопку на мобильных */
+    }
+}
+
+/* Скрываем стандартную кнопку поиска в шапке */
+.md-search__inner {
+    display: none !important;
+}
