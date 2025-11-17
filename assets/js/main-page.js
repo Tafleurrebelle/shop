@@ -26,6 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 allProducts.push({
                     id: paddedIndex,
                     name: meta.name,
+                    price: meta.price, // Цена добавлена
                     url: `products/item_${paddedIndex}/`,
                     image: `products/item_${paddedIndex}/${meta.image}`
                 });
@@ -33,6 +34,8 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .catch(error => {
                 console.log('Обнаружение товаров завершено.');
+                // Сортируем товары по имени перед отрисовкой
+                allProducts.sort((a, b) => a.name.localeCompare(b.name));
                 renderProducts();
             });
     }
@@ -42,10 +45,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
         productsToRender.forEach(product => {
             const productCard = `
-                <div class="product-card" style="border: 1px solid #ccc; border-radius: 5px; padding: 1rem; width: 200px; text-align: center;">
-                    <a href="${product.url}">
-                        <img src="${product.image}" alt="${product.name}" style="max-width: 100%; height: auto; aspect-ratio: 3/2; object-fit: cover;">
-                        <h4 style="margin-top: 0.5rem; margin-bottom: 0;">${product.name}</h4>
+                <div class="product-card" style="border: 1px solid #ccc; border-radius: 5px; padding: 1rem; width: 200px; text-align: center; display: flex; flex-direction: column; justify-content: space-between;">
+                    <a href="${product.url}" style="text-decoration: none; color: inherit; display: flex; flex-direction: column; flex-grow: 1;">
+                        <img src="${product.image}" alt="${product.name}" style="max-width: 100%; height: auto; aspect-ratio: 3/2; object-fit: cover; margin-bottom: 0.5rem;">
+                        <h4 style="margin: 0.5rem 0 0.25rem 0;">${product.name}</h4>
+                        <p class="product-price" style="margin: 0.25rem 0 0.5rem 0; font-size: 1.1em; font-weight: bold;">${product.price.toFixed(2)} ₽</p>
                     </a>
                 </div>
             `;

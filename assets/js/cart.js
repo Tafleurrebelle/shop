@@ -27,6 +27,26 @@ class ShoppingCart {
         console.log(`Добавлен товар: ${item.name}. Текущая корзина:`, this.items);
     }
 
+    incrementItem(itemId) {
+        const item = this.items.find(i => i.id === itemId);
+        if (item) {
+            item.quantity++;
+            this.saveCart();
+        }
+    }
+
+    decrementItem(itemId) {
+        const item = this.items.find(i => i.id === itemId);
+        if (item) {
+            item.quantity--;
+            if (item.quantity <= 0) {
+                this.removeItem(itemId);
+            } else {
+                this.saveCart();
+            }
+        }
+    }
+
     removeItem(itemId) {
         this.items = this.items.filter(item => item.id !== itemId);
         this.saveCart();

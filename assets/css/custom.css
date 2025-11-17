@@ -23,3 +23,147 @@
     visibility: visible;
     bottom: 30px;
 }
+
+/*
+ * Стили для страницы корзины
+ * ============================================================================== */
+
+.cart-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.cart-item {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid var(--md-default-fg-color--lightest);
+    align-items: flex-start;
+}
+
+.cart-item:first-child {
+    padding-top: 0.5rem;
+}
+
+.cart-item:last-child {
+    border-bottom: none;
+}
+
+/* Блок с изображением */
+.cart-item__image {
+    width: 150px;
+    flex-shrink: 0;
+}
+
+.cart-item__image img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 3/2;
+    object-fit: cover;
+    border-radius: 4px;
+    display: block;
+}
+
+/* Блок с деталями о товаре */
+.cart-item__details {
+    flex: 1;
+    min-width: 250px; /* Чтобы текст не сжимался слишком сильно */
+    display: flex;
+    flex-direction: column;
+}
+
+.cart-item__name {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: var(--md-default-fg-color--link);
+}
+
+.cart-item__description {
+    margin: 0 0 1rem 0;
+    font-size: 0.9em;
+    line-height: 1.5;
+    color: var(--md-default-fg-color--light);
+}
+
+/* Блок с кнопками и количеством */
+.cart-item__controls {
+    margin-top: auto; /* Прижимает блок к низу */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* Блок с ценой */
+.cart-item__price {
+    font-size: 1.3em;
+    font-weight: bold;
+    white-space: nowrap;
+    margin-left: auto; /* Прижимает цену к правому краю */
+    padding-left: 1rem;
+    text-align: right;
+}
+
+/* Стили для кнопок +/- в корзине */
+.cart-item__quantity-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.cart-item__quantity-controls .quantity-btn {
+    min-width: 32px;
+    padding: 0;
+    height: 32px;
+    font-size: 1.2em;
+}
+
+.cart-item__quantity-controls .quantity-text {
+    min-width: 70px;
+    text-align: center;
+    font-size: 0.9em;
+}
+
+/*
+ * Стили для страницы товара
+ * ============================================================================== */
+
+.product-page-price {
+    font-size: 1.8em;
+    font-weight: bold;
+    margin: 1rem 0;
+    color: var(--md-primary-fg-color);
+}
+
+/*
+ * Стили для галереи Swiper.js
+ * ============================================================================== */
+
+.swiper {
+    width: 100%;
+    max-height: 66vh; /* Не более 2/3 высоты экрана */
+    height: auto; /* Позволяет высоте адаптироваться к содержимому */
+    min-height: 300px; /* Минимальная высота для больших экранов */
+    margin-bottom: 1rem;
+    border-radius: 5px;
+}
+
+.swiper-slide img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Масштабирует изображение, чтобы оно полностью помещалось в слайд, не обрезаясь */
+}
+
+/* Стилизация элементов навигации Swiper под тему Material */
+.swiper-button-next,
+.swiper-button-prev {
+    color: var(--md-primary-fg-color) !important;
+}
+
+.swiper-pagination-bullet-active {
+    background: var(--md-primary-fg-color) !important;
+}

@@ -41,6 +41,8 @@
       
     
     
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css">
+    
       <link rel="stylesheet" href="../assets/css/custom.css">
     
     <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
@@ -277,85 +279,156 @@
 
 <h1 id="_1">Корзина</h1>
 <p>Здесь отображены все выбранные вами товары.</p>
-<p><br>
-<button id="clear-wishlist" class="md-button md-button--primary">Очистить список</button>
-<button id="copy-wishlist" class="md-button">Скопировать список</button></p>
+<p><br></p>
+<div id="cart-controls" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+    <div>
+        <button id="clear-cart" class="md-button md-button--primary">Очистить корзину</button>
+        <button id="copy-cart" class="md-button">Скопировать как текст</button>
+    </div>
+    <div id="cart-total-summary" style="font-size: 1.2em; font-weight: bold;">
+        <!-- Общая стоимость будет здесь -->
+    </div>
+</div>
 <hr>
 
-<div id="wishlist-container" style="display: flex; flex-wrap: wrap; gap: 1rem;">
+<div id="cart-container">
     <!-- Карточки товаров будут загружены сюда -->
 </div>
 
 <script>
-    const wishlistContainer = document.getElementById('wishlist-container');
-    const clearBtn = document.getElementById('clear-wishlist');
-    const copyBtn = document.getElementById('copy-wishlist');
+    const cartContainer = document.getElementById('cart-container');
+    const clearBtn = document.getElementById('clear-cart');
+    const copyBtn = document.getElementById('copy-cart');
+    const totalSummaryEl = document.getElementById('cart-total-summary');
 
-    function renderWishlist() {
+    function renderCart() {
+        console.log('%c[renderCart] Запуск отрисовки корзины...', 'color: blue;');
         if (typeof myCart === 'undefined') {
-            console.error('myCart is not defined. Make sure cart.js is loaded.');
-            wishlistContainer.innerHTML = '<p>Ошибка загрузки корзины.</p>';
+            console.error('[renderCart] myCart is not defined. Make sure cart.js is loaded.');
+            cartContainer.innerHTML = '<p>Ошибка загрузки корзины.</p>';
             return;
         }
-        // --- ДИАГНОСТИЧЕСКИЙ ЛОГ ---
-        console.log(`%cНа странице корзины, в myCart ${myCart.getTotalItems()} товаров`, 'color: purple; font-weight: bold;');
 
         const items = myCart.getCartItems();
-        wishlistContainer.innerHTML = '';
+        console.log(`[renderCart] Найдено ${items.length} товаров для отображения.`);
+        cartContainer.innerHTML = '';
+        let grandTotal = 0;
 
         if (items.length === 0) {
-            wishlistContainer.innerHTML = '<p>Ваш список пока пуст.</p>';
+            cartContainer.innerHTML = '<p>Ваша корзина пока пуста.</p>';
+            totalSummaryEl.innerHTML = '';
+            console.log('[renderCart] Корзина пуста, отрисовка завершена.');
             return;
         }
 
+        const cartList = document.createElement('ul');
+        cartList.className = 'cart-list';
+
         items.forEach(item => {
-            if (!item.url || !item.image) {
-                wishlistContainer.innerHTML += `<p style='color: red;'>В корзине найден товар старого формата ('${item.name}'). Пожалуйста, очистите корзину и добавьте товары заново.</p>`;
+            if (!item.url || !item.image || typeof item.price === 'undefined' || typeof item.quantity === 'undefined') {
+                cartContainer.innerHTML += `<p style='color: red;'>В корзине найден товар старого или некорректного формата ('${item.name}'). Пожалуйста, очистите корзину и добавьте товары заново.</p>`;
                 return;
             }
 
-            const productCard = `
-                <div class="product-card" style="border: 1px solid #ccc; border-radius: 5px; padding: 1rem; width: 200px; text-align: center; display: flex; flex-direction: column; justify-content: space-between;">
-                    <div>
-                        <a href="${item.url}">
-                            <img src="${item.image}" alt="${item.name}" style="max-width: 100%; height: auto; aspect-ratio: 3/2; object-fit: cover;">
-                            <h4 style="margin-top: 0.5rem; margin-bottom: 0;">${item.name}</h4>
-                        </a>
-                        <p>Количество: ${item.quantity}</p>
+            const itemTotalPrice = item.price * item.quantity;
+            grandTotal += itemTotalPrice;
+
+            const listItem = document.createElement('li');
+            listItem.className = 'cart-item';
+            listItem.innerHTML = `
+                <div class="cart-item__image">
+                    <a href="${item.url}">
+                        <img src="${item.image}" alt="${item.name}">
+                    </a>
+                </div>
+                <div class="cart-item__details">
+                    <a href="${item.url}">
+                        <h4 class="cart-item__name">${item.name}</h4>
+                    </a>
+                    <p class="cart-item__description">${item.description || 'Описание отсутствует.'}</p>
+                    <div class="cart-item__controls">
+                        <div class="cart-item__quantity-controls">
+                            <button class="md-button quantity-btn" data-action="decrement" data-item-id="${item.id}">-</button>
+                            <span class="quantity-text">Кол-во: ${item.quantity}</span>
+                            <button class="md-button quantity-btn" data-action="increment" data-item-id="${item.id}">+</button>
+                        </div>
+                        <button class="md-button remove-item-btn" data-item-id="${item.id}">Удалить</button>
                     </div>
-                    <button class="md-button remove-item-btn" data-item-id="${item.id}">Удалить</button>
+                </div>
+                <div class="cart-item__price">
+                    <span>${itemTotalPrice.toFixed(2)} ₽</span>
                 </div>
             `;
-            wishlistContainer.innerHTML += productCard;
+            cartList.appendChild(listItem);
         });
 
-        // Перепривязываем события к новым кнопкам
+        cartContainer.appendChild(cartList);
+        totalSummaryEl.innerHTML = `Общая стоимость: ${grandTotal.toFixed(2)} ₽`;
+        console.log(`[renderCart] Отрисовка завершена. Общая стоимость: ${grandTotal.toFixed(2)} ₽`);
+
+        // --- Привязка событий ---
+
+        // Кнопки +/-
+        document.querySelectorAll('.quantity-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const itemId = this.getAttribute('data-item-id');
+                const action = this.getAttribute('data-action');
+
+                if (action === 'increment') {
+                    console.log(`%c[Quantity Button] Увеличиваю количество для ID: ${itemId}`, 'color: #3f51b5;');
+                    myCart.incrementItem(itemId);
+                } else if (action === 'decrement') {
+                    console.log(`%c[Quantity Button] Уменьшаю количество для ID: ${itemId}`, 'color: #f44336;');
+                    myCart.decrementItem(itemId);
+                }
+                renderCart(); // Перерисовываем корзину для обновления UI
+            });
+        });
+
+        // Кнопка "Удалить"
         document.querySelectorAll('.remove-item-btn').forEach(button => {
             button.addEventListener('click', function() {
                 const itemId = this.getAttribute('data-item-id');
+                console.log(`%c[Remove Button] Нажата кнопка 'Удалить' для товара ID: ${itemId}`, 'color: orange;');
                 myCart.removeItem(itemId);
-                renderWishlist(); 
+                renderCart(); 
                 showMySnackbar('Товар удален из корзины');
-                updateCartCount();
             });
         });
     }
 
-    function copyWishlistToClipboard() {
+    function copyCartToClipboard() {
+        console.log('%c[Copy Button] Нажата кнопка "Скопировать как текст"', 'color: green;');
         const items = myCart.getCartItems();
         if (items.length === 0) {
-            alert('Список пуст, нечего копировать!');
+            showMySnackbar('Корзина пуста, нечего копировать!');
+            console.log('[Copy Button] Корзина пуста, копирование отменено.');
             return;
         }
-        let textToCopy = 'Мой список товаров:\n';
+        let grandTotal = 0;
+        let textToCopy = 'Мой список товаров:\n\n';
+
         items.forEach(item => {
-            textToCopy += `${item.name} (ID: ${item.id}) - Количество: ${item.quantity}\n`;
+            const itemTotalPrice = (item.price || 0) * (item.quantity || 0);
+            grandTotal += itemTotalPrice;
+            textToCopy += `- ${item.name}\n`;
+            textToCopy += `  Количество: ${item.quantity}\n`;
+            textToCopy += `  Стоимость: ${itemTotalPrice.toFixed(2)} ₽\n\n`;
         });
+
+        textToCopy += `--------------------\n`;
+        textToCopy += `Общая стоимость: ${grandTotal.toFixed(2)} ₽`;
+
+        console.log('[Copy Button] Будет скопирован следующий текст:\n', textToCopy);
+
         navigator.clipboard.writeText(textToCopy)
-            .then(() => showMySnackbar('Список скопирован в буфер обмена!'))
+            .then(() => {
+                showMySnackbar('Список скопирован в буфер обмена!');
+                console.log('[Copy Button] Текст успешно скопирован в буфер обмена.');
+            })
             .catch(err => {
-                console.error('Не удалось скопировать текст: ', err);
-                alert('Не удалось скопировать список. Пожалуйста, скопируйте вручную.');
+                console.error('[Copy Button] Не удалось скопировать текст: ', err);
+                showMySnackbar('Ошибка при копировании. Попробуйте еще раз.');
             });
     }
 
@@ -372,20 +445,25 @@
     }
 
     clearBtn.addEventListener('click', () => {
+        const itemsBeforeClear = myCart.getTotalItems();
+        console.log(`%c[Clear Button] Нажата кнопка 'Очистить корзину'. Товаров в корзине до очистки: ${itemsBeforeClear}`, 'color: red; font-weight: bold;');
         myCart.clearCart();
-        renderWishlist();
+        renderCart();
         showMySnackbar('Корзина очищена');
-        updateCartCount();
+        console.log('[Clear Button] Корзина очищена, UI обновлен.');
     });
 
-    copyBtn.addEventListener('click', copyWishlistToClipboard);
+    copyBtn.addEventListener('click', copyCartToClipboard);
 
-    document.addEventListener('DOMContentLoaded', renderWishlist);
+    document.addEventListener('DOMContentLoaded', renderCart);
 
     window.addEventListener('storage', function(e) {
         if (e.key === 'shoppingCart') {
-            renderWishlist();
-            updateCartCount();
+            console.log('[Storage Event] Обнаружено изменение в localStorage. Обновляю корзину...');
+            if (typeof myCart !== 'undefined') {
+                myCart.items = myCart.loadCart();
+            }
+            renderCart();
         }
     });
 </script>
@@ -442,13 +520,15 @@
     
       <script src="../assets/javascripts/bundle.f55a23d4.min.js"></script>
       
+        <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
+      
         <script src="../assets/js/cart.js"></script>
+      
+        <script src="../assets/js/cart-ui-updater.js"></script>
       
         <script src="../assets/js/main-page.js"></script>
       
         <script src="../assets/js/product-page.js"></script>
-      
-        <script src="../assets/js/cart-ui-updater.js"></script>
       
     
   </body>
